@@ -7,6 +7,13 @@ buildscript {
     }
 }
 
+repositories {
+    mavenCentral()
+}
+
+group = "org.papathanasiou.denis.ARMS"
+version = "0.0.1-SNAPSHOT"
+
 plugins {
     application
 }
@@ -25,4 +32,6 @@ repositories {
 
 dependencies {
     compile(kotlinModule("stdlib"))
+    compile("org.glassfish.jersey.core:jersey-server:2.25.1")
+    compile("org.glassfish.jersey.containers:jersey-container-netty-http:2.25.1")
 }
