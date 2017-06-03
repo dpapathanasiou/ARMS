@@ -3,7 +3,6 @@ package org.papathanasiou.denis.ARMS
 import org.glassfish.jersey.netty.httpserver.NettyHttpContainerProvider
 import org.glassfish.jersey.server.ResourceConfig
 import java.net.URI
-import javax.ws.rs.ext.ContextResolver
 
 object AnotherRESTfulMongoService {
     @JvmStatic

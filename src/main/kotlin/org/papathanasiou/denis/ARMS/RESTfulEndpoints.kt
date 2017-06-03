@@ -3,6 +3,7 @@ package org.papathanasiou.denis.ARMS
 import javax.ws.rs.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
 
+@Path("")
 class RESTfulEndpoints {
     @GET @Produces(APPLICATION_JSON)
     @Path("{database}/{collection}")
