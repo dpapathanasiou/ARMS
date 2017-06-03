@@ -20,6 +20,7 @@ plugins {
 
 apply {
     plugin("kotlin")
+    from("versions.gradle")
 }
 
 application {
@@ -32,6 +33,6 @@ repositories {
 
 dependencies {
     compile(kotlinModule("stdlib"))
-    compile("org.glassfish.jersey.core:jersey-server:2.25.1")
-    compile("org.glassfish.jersey.containers:jersey-container-netty-http:2.25.1")
+    compile("org.glassfish.jersey.core:jersey-server:"+ext.get("jersey"))
+    compile("org.glassfish.jersey.containers:jersey-container-netty-http:"+ext.get("jersey"))
 }

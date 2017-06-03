@@ -1,0 +1,5 @@
+// define dependency versions
+
+ext {
+    jersey = '2.25.1'
+}
