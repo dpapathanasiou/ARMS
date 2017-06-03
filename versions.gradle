@@ -2,4 +2,5 @@
 
 ext {
     jersey = '2.25.1'
+    jacksonKotlin = '2.8.7'
 }

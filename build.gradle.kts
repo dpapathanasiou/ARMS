@@ -35,4 +35,5 @@ dependencies {
     compile(kotlinModule("stdlib"))
     compile("org.glassfish.jersey.core:jersey-server:"+ext.get("jersey"))
     compile("org.glassfish.jersey.containers:jersey-container-netty-http:"+ext.get("jersey"))
+    compile("com.fasterxml.jackson.module:jackson-module-kotlin:"+ext.get("jacksonKotlin"))
 }
