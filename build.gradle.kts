@@ -36,4 +36,5 @@ dependencies {
     compile("org.glassfish.jersey.core:jersey-server:"+ext.get("jersey"))
     compile("org.glassfish.jersey.containers:jersey-container-netty-http:"+ext.get("jersey"))
     compile("com.fasterxml.jackson.module:jackson-module-kotlin:"+ext.get("jacksonKotlin"))
+    compile("org.mongodb:mongodb-driver:"+ext.get("mongo"))
 }
