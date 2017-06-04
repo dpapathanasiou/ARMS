@@ -16,3 +16,16 @@ The database and collection names are embedded in the first two [path parameters
 | PUT  | /{database}/{collection}<br /><br /><i>plus a [json](http://json.org/) document in the request [message body](https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.3)</i>  | [database.collection.insertOne({ json document })](https://docs.mongodb.com/manual/reference/method/db.collection.insertOne/) |
 | PUT  | /{database}/{collection}?key<sub>0</sub>=value<sub>0</sub>&key<sub>1</sub>=value<sub>1</sub> ... <br /><br /><i>plus a [json](http://json.org/) document in the request [message body](https://www.w3.org/Protocols/rfc2616/rfc2616-sec4.html#sec4.3)</i>  | [database.collection.replaceOne(<br />{ key<sub>0</sub> : value<sub>0</sub>, key<sub>1</sub> : value<sub>1</sub>, ... },<br />{ json document },<br />upsert: true)](https://docs.mongodb.com/manual/reference/method/db.collection.replaceOne/) |
 | DELETE  | /{database}/{collection}?key<sub>0</sub>=value<sub>0</sub>&key<sub>1</sub>=value<sub>1</sub> ...  | [database.collection.deleteMany({ key<sub>0</sub> : value<sub>0</sub>, key<sub>1</sub> : value<sub>1</sub>, ... })](https://docs.mongodb.com/manual/reference/method/db.collection.deleteMany/) |
+
+## Configuration
+
+Edit the [configuration.json](src/main/resouces/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
+
+The default values are:
+
+```json
+{
+    "mongoURI": "mongodb://localhost:27017",
+    "serviceURI": "http://localhost:9001/"
+}
+```
