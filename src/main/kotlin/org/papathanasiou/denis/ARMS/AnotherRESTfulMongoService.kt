@@ -21,7 +21,7 @@ object AnotherRESTfulMongoService {
         val json = AnotherRESTfulMongoService.javaClass.classLoader.getResource(CONF_JSON)
                 ?: throw IOException("Could not find or load $CONF_JSON from src/main/resources")
         val conf = mapper.readValue<ARMSConfiguration>(json)
-        val resourceConfig = ResourceConfig.forApplication(JaxRSApplication())
+        val resourceConfig = ResourceConfig.forApplication(JaxRSApplication(conf))
         val server = NettyHttpContainerProvider.createHttp2Server(URI.create(conf.serviceURI), resourceConfig, null)
         Runtime.getRuntime().addShutdownHook(Thread(Runnable { server.close() }))
     }

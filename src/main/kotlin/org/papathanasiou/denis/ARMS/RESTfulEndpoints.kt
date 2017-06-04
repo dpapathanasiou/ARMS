@@ -9,7 +9,9 @@ class BadAPIRequest : WebApplicationException {
 }
 
 @Path("")
-class RESTfulEndpoints {
+class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
+    override val connection: MongoConnection = MongoConnection(config.mongoURI)
+
     @GET @Produces(APPLICATION_JSON)
     @Path("{database}/{collection}")
     fun findDocument(@PathParam("database") database: String,
