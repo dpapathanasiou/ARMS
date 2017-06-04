@@ -40,4 +40,19 @@ class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
 
         return Response.status(status).type(APPLICATION_JSON).entity(content).build()
     }
+
+    @DELETE @Produces(APPLICATION_JSON)
+    @Path("{database}/{collection}")
+    fun deleteDocument(@PathParam("database") database: String,
+                       @PathParam("collection") collection: String,
+                       @Context ui: UriInfo): Response {
+
+        val query = ui.getQueryParameters()
+        if (query.isEmpty()) throw BadAPIRequest("please provide query parameters")
+
+        val results = removeDocuments(database, collection, scalarizeQueryParameters(query))
+        val matches = results ?: 0L
+        val content = if( matches == 1L ) "{\"deleted\": \"1 document\"}" else "{\"deleted\": \"$matches documents\"}"
+        return Response.status(Response.Status.OK).type(APPLICATION_JSON).entity(content).build()
+    }
 }
