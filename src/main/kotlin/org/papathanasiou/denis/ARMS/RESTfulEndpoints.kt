@@ -62,6 +62,7 @@ class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
                              doc: String,
                              @Context ui: UriInfo): Response {
 
+        // TODO: if the doc is invalid json, return a 400/Bad Request, not the 500 jersey default
         addDocument(database, collection, scalarizeQueryParameters(ui.queryParameters), doc)
         return Response.status(Response.Status.NO_CONTENT).build()
     }
