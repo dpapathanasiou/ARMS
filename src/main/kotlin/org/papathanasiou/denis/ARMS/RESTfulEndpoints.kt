@@ -6,7 +6,6 @@ import javax.ws.rs.core.MediaType.APPLICATION_JSON
 import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
-import kotlin.reflect.jvm.internal.impl.resolve.scopes.SyntheticScopes
 
 class BadAPIRequest : WebApplicationException {
     constructor(message: String?) : super(message, Response.Status.BAD_REQUEST)
@@ -30,7 +29,7 @@ class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
                      @PathParam("collection") collection: String,
                      @Context ui: UriInfo): Response {
 
-        val query = ui.getQueryParameters()
+        val query = ui.queryParameters
         if( query.isEmpty() ) throw BadAPIRequest("please provide query parameters")
 
         val results = getDocuments(database, collection, scalarizeQueryParameters(query))
@@ -47,12 +46,23 @@ class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
                        @PathParam("collection") collection: String,
                        @Context ui: UriInfo): Response {
 
-        val query = ui.getQueryParameters()
+        val query = ui.queryParameters
         if (query.isEmpty()) throw BadAPIRequest("please provide query parameters")
 
         val results = removeDocuments(database, collection, scalarizeQueryParameters(query))
         val matches = results ?: 0L
         val content = if( matches == 1L ) "{\"deleted\": \"1 document\"}" else "{\"deleted\": \"$matches documents\"}"
         return Response.status(Response.Status.OK).type(APPLICATION_JSON).entity(content).build()
+    }
+
+    @PUT @Consumes(APPLICATION_JSON)
+    @Path("{database}/{collection}")
+    fun addOrReplaceDocument(@PathParam("database") database: String,
+                             @PathParam("collection") collection: String,
+                             doc: String,
+                             @Context ui: UriInfo): Response {
+
+        addDocument(database, collection, scalarizeQueryParameters(ui.queryParameters), doc)
+        return Response.status(Response.Status.NO_CONTENT).build()
     }
 }
