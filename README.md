@@ -19,7 +19,7 @@ The database and collection names are embedded in the first two [path parameters
 
 ## Configuration
 
-Edit the [configuration.json](/src/main/resouces/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
+Edit the [configuration.json](src/main/resources/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
 
 The default values are:
 
