@@ -19,7 +19,7 @@ The database and collection names are embedded in the first two [path parameters
 
 ## Configuration
 
-Edit the [configuration.json](src/main/resouces/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
+Edit the [configuration.json](/src/main/resouces/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
 
 The default values are:
 
@@ -29,3 +29,15 @@ The default values are:
     "serviceURI": "http://localhost:9001/"
 }
 ```
+
+## Roadmap
+
+Features to add, and other things to implement in the future:
+
+- [ ] Unit tests and continuous integration
+- [ ] Deployable jars and instructions
+- [ ] Handling mongo connection errors using an appropriate [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for the API requests (e.g., 410 Gone or 503 Service Unavailable, etc.), along with an alert to the service maintainer
+- [ ] Authentication, especially for PUT and DELETE requests 
+- [ ] Prevent [Jersey](https://jersey.github.io/) from returning 500 when the json document used in the PUT request is invalid (alas, [this solution](https://stackoverflow.com/a/10738086) doesn't seem to work)
+
+Pull requests for both roadmap ideas and implementations are welcome!
