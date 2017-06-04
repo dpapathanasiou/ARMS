@@ -24,6 +24,5 @@ interface MongoInterface {
             getCollection(database, collection)?.insertOne(Document.parse(doc))
         else
             getCollection(database, collection)?.replaceOne(Document(query), Document.parse(doc), UpdateOptions().upsert(true))
-
     }
 }
