@@ -1,5 +1,6 @@
 package org.papathanasiou.denis.ARMS
 
+import com.mongodb.MongoClient
 import javax.ws.rs.DELETE
 import javax.ws.rs.GET
 import javax.ws.rs.PUT
@@ -19,8 +20,8 @@ class BadAPIRequest : WebApplicationException {
 }
 
 @Path("")
-class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
-    override val connection: MongoConnection = MongoConnection(config.mongoURI)
+class RESTfulEndpoints(client: MongoClient?): MongoInterface {
+    override val connection: MongoConnection = MongoConnection(client)
 
     val EMPTY_JSON = "{}"
 
