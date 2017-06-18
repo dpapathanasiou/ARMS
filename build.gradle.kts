@@ -38,4 +38,5 @@ dependencies {
     compile("com.fasterxml.jackson.module:jackson-module-kotlin:"+ext.get("jacksonKotlin"))
     compile("org.mongodb:mongodb-driver:"+ext.get("mongo"))
     testCompile("junit:junit:"+ext.get("junit"))
+    testCompile("org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:"+ext.get("jersey"))
 }

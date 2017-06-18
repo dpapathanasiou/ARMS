@@ -2,12 +2,27 @@ package org.papathanasiou.denis.ARMS
 
 import org.junit.Assert
 import org.junit.Test
+import org.glassfish.jersey.test.JerseyTest
+import org.glassfish.jersey.server.ResourceConfig
+import org.glassfish.jersey.test.grizzly.GrizzlyWebTestContainerFactory
+import org.glassfish.jersey.test.spi.TestContainerFactory
+import org.glassfish.jersey.servlet.ServletContainer
+import org.glassfish.jersey.test.ServletDeploymentContext
+import org.glassfish.jersey.test.DeploymentContext
 
-class AnotherRESTfulMongoServiceTest {
+class AnotherRESTfulMongoServiceTest : JerseyTest {
+    constructor()
+
+    override fun getTestContainerFactory(): TestContainerFactory {
+        return GrizzlyWebTestContainerFactory()
+    }
+
+    override fun configureDeployment(): DeploymentContext {
+        return ServletDeploymentContext.forServlet(ServletContainer(ResourceConfig(AnotherRESTfulMongoService.javaClass))).build()
+    }
 
     @Test
     fun firstTest() {
         Assert.assertTrue(1 == 1)
     }
-
 }
