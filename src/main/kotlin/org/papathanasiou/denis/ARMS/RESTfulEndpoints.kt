@@ -58,7 +58,7 @@ class RESTfulEndpoints(config: ARMSConfiguration): MongoInterface {
 
         val results = removeDocuments(database, collection, scalarizeQueryParameters(query))
         val matches = results ?: 0L
-        val content = if( matches == 1L ) "{\"deleted\": \"1 document\"}" else "{\"deleted\": \"$matches documents\"}"
+        val content = if( matches == 1L ) """{"deleted": "1 document"}""" else """{"deleted": "$matches documents"}"""
         return Response.status(Response.Status.OK).type(APPLICATION_JSON).entity(content).build()
     }
 
