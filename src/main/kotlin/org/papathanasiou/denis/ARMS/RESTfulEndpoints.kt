@@ -15,15 +15,13 @@ import javax.ws.rs.core.MultivaluedMap
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
-class BadAPIRequest : WebApplicationException {
-    constructor(message: String?) : super(message, Response.Status.BAD_REQUEST)
-}
+class BadAPIRequest(message: String?) : WebApplicationException(message, Response.Status.BAD_REQUEST)
 
 @Path("")
 class RESTfulEndpoints(client: MongoClient?): MongoInterface {
     override val connection: MongoConnection = MongoConnection(client)
 
-    val EMPTY_JSON = "{}"
+    val MISSING_PARAMS = "please provide query parameters"
 
     fun scalarizeQueryParameters(query: MultivaluedMap<String, String>): Map<String,String> {
         return query.filter({it.value.isNotEmpty()})
@@ -38,11 +36,11 @@ class RESTfulEndpoints(client: MongoClient?): MongoInterface {
                      @Context ui: UriInfo): Response {
 
         val query = ui.queryParameters
-        if( query.isEmpty() ) throw BadAPIRequest("please provide query parameters")
+        if( query.isEmpty() ) throw BadAPIRequest(MISSING_PARAMS)
 
         val results = getDocuments(database, collection, scalarizeQueryParameters(query))
         val matches = results?.size ?: 0
-        val content = if( matches > 0 ) results?.joinToString(",") else EMPTY_JSON
+        val content = if( matches > 0 ) results?.joinToString(",") else "{}"
         val status  = if( matches > 0 ) Response.Status.OK else Response.Status.NOT_FOUND
 
         return Response.status(status).type(APPLICATION_JSON).entity(content).build()
@@ -55,7 +53,7 @@ class RESTfulEndpoints(client: MongoClient?): MongoInterface {
                        @Context ui: UriInfo): Response {
 
         val query = ui.queryParameters
-        if (query.isEmpty()) throw BadAPIRequest("please provide query parameters")
+        if (query.isEmpty()) throw BadAPIRequest(MISSING_PARAMS)
 
         val results = removeDocuments(database, collection, scalarizeQueryParameters(query))
         val matches = results ?: 0L

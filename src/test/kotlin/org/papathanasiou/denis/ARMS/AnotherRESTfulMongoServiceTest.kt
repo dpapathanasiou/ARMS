@@ -24,6 +24,12 @@ class AnotherRESTfulMongoServiceTest : JerseyTest() {
     }
 
     @Test
+    fun testInvalidSearch() {
+        val result = target(TEST_DB+"/foo").request().get(Response::class.java)
+        Assert.assertEquals(Response.Status.BAD_REQUEST.statusCode, result.statusInfo.statusCode)
+    }
+
+    @Test
     fun testDocumentNotFound() {
         val result = target(TEST_DB+"/foo").queryParam("id", "bar").request().get(Response::class.java)
         Assert.assertEquals("{}", result.readEntity(String::class.java))
