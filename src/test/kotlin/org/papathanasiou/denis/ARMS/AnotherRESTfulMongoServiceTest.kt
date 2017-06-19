@@ -1,6 +1,5 @@
 package org.papathanasiou.denis.ARMS
 
-import com.github.fakemongo.junit.FongoRule
 import org.junit.Assert
 import org.junit.Test
 import org.glassfish.jersey.test.JerseyTest
@@ -10,23 +9,24 @@ import org.glassfish.jersey.test.spi.TestContainerFactory
 import org.glassfish.jersey.servlet.ServletContainer
 import org.glassfish.jersey.test.ServletDeploymentContext
 import org.glassfish.jersey.test.DeploymentContext
-import org.junit.Rule
+import javax.ws.rs.core.Response
+
 
 class AnotherRESTfulMongoServiceTest : JerseyTest() {
-    @Rule @JvmField
-    var fongoRule = FongoRule()
+    val TEST_DB = "testDB"
 
     override fun getTestContainerFactory(): TestContainerFactory {
         return GrizzlyWebTestContainerFactory()
     }
 
     override fun configureDeployment(): DeploymentContext {
-        return ServletDeploymentContext.forServlet(ServletContainer(ResourceConfig(AnotherRESTfulMongoService.javaClass))).build()
+        return ServletDeploymentContext.forServlet(ServletContainer(ResourceConfig(RESTfulEndpointsTest::class.java))).build()
     }
 
     @Test
-    fun firstTest() {
-        Assert.assertTrue(1 == 1)
+    fun testDocumentNotFound() {
+        val result = target(TEST_DB+"/foo").queryParam("id", "bar").request().get(Response::class.java)
+        Assert.assertEquals(Response.Status.NOT_FOUND.statusCode, result.statusInfo.statusCode)
     }
 
 }
