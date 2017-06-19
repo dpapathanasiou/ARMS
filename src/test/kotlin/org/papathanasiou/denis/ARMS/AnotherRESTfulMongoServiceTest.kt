@@ -26,6 +26,7 @@ class AnotherRESTfulMongoServiceTest : JerseyTest() {
     @Test
     fun testDocumentNotFound() {
         val result = target(TEST_DB+"/foo").queryParam("id", "bar").request().get(Response::class.java)
+        Assert.assertEquals("{}", result.readEntity(String::class.java))
         Assert.assertEquals(Response.Status.NOT_FOUND.statusCode, result.statusInfo.statusCode)
     }
 
