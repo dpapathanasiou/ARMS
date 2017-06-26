@@ -6,30 +6,31 @@ import javax.ws.rs.core.Context
 import javax.ws.rs.core.Response
 import javax.ws.rs.core.UriInfo
 
-@Path("{database}")
-class RESTfulEndpointsTest(@PathParam("database") database: String) {
+object RESTfulEndpointsTestAPI {
+    // make sure the same instance of Fongo is used for all the unit tests
+    val fongo: Fongo = Fongo("foo")
+}
+
+@Path("{database}/{collection}")
+class RESTfulEndpointsTest(@PathParam("database") database: String,
+                           @PathParam("collection") collection: String) {
     val TEST_DB = database
-    val rest = RESTfulEndpoints(Fongo(TEST_DB).mongo)
+    val TEST_COL = collection
+
+    val rest = RESTfulEndpoints(RESTfulEndpointsTestAPI.fongo.mongo)
 
     @GET
-    @Path("{collection}")
-    fun findDocument(@PathParam("collection") collection: String,
-                     @Context ui: UriInfo): Response {
-        return rest.findDocument(TEST_DB, collection, ui)
+    fun findDocument(@Context ui: UriInfo): Response {
+        return rest.findDocument(TEST_DB, TEST_COL, ui)
     }
 
     @DELETE
-    @Path("{collection}")
-    fun deleteDocument(@PathParam("collection") collection: String,
-                       @Context ui: UriInfo): Response {
-        return rest.deleteDocument(TEST_DB, collection, ui)
+    fun deleteDocument(@Context ui: UriInfo): Response {
+        return rest.deleteDocument(TEST_DB, TEST_COL, ui)
     }
 
     @PUT
-    @Path("{collection}")
-    fun addOrReplaceDocument(@PathParam("collection") collection: String,
-                             document: String,
-                             @Context ui: UriInfo): Response {
-        return rest.addOrReplaceDocument(TEST_DB, collection, document, ui)
+    fun addOrReplaceDocument(document: String, @Context ui: UriInfo): Response {
+        return rest.addOrReplaceDocument(TEST_DB, TEST_COL, document, ui)
     }
 }
