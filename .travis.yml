@@ -22,5 +22,5 @@ cache:
     - $HOME/.gradle/caches/
     - $HOME/.gradle/wrapper/
 
-# figuring out why travis-side tests fail
-script: ./gradlew --debug --info clean test
+# above all, seem to need this, an explicit call to test!
+script: ./gradlew clean test
