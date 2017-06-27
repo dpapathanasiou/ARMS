@@ -1,6 +1,6 @@
 # <u>A</u>nother <u>R</u>ESTful <u>M</u>ongo <u>S</u>ervice
 
-![Travis CI Status Image](https://travis-ci.org/dpapathanasiou/ARMS.svg?branch=master)
+[![Travis CI Status Image](https://travis-ci.org/dpapathanasiou/ARMS.svg?branch=master)](https://travis-ci.org/dpapathanasiou/ARMS)
 
 ## About
 
