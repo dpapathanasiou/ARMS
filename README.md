@@ -1,5 +1,7 @@
 # <u>A</u>nother <u>R</u>ESTful <u>M</u>ongo <u>S</u>ervice
 
+![Travis CI Status Image](https://travis-ci.org/dpapathanasiou/ARMS.svg?branch=master)
+
 ## About
 
 The basic idea is that since a subset of [HTTP verbs](https://www.w3.org/Protocols/rfc2616/rfc2616-sec9.html) map nicely to [Mongo Database](https://en.wikipedia.org/wiki/MongoDB) [CRUD operations](https://docs.mongodb.com/manual/crud/), it would be useful to provide a [RESTful web service](https://www.ibm.com/developerworks/library/ws-restful/index.html) for read/write access by a variety of clients.
@@ -34,11 +36,11 @@ The default values are:
 
 Features to add, and other things to implement in the future:
 
-- [ ] Unit tests and continuous integration
+- [X] Unit tests and continuous integration
 - [ ] Deployable jars and instructions
 - [ ] Support for more complex queries, using [QueryBuilder](http://api.mongodb.com/java/current/com/mongodb/QueryBuilder.html)
 - [ ] Handling mongo connection errors using an appropriate [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for the API requests (e.g., 410 Gone or 503 Service Unavailable, etc.), along with an alert to the service maintainer
-- [ ] Authentication, especially for PUT and DELETE requests 
+- [ ] Authentication, especially for PUT and DELETE requests
 - [ ] Prevent [Jersey](https://jersey.github.io/) from returning 500 when the json document used in the PUT request is invalid (alas, [this solution](https://stackoverflow.com/a/10738086) doesn't seem to work)
 
 Pull requests for both roadmap ideas and implementations are welcome!
