@@ -36,7 +36,7 @@ The default values are:
 
 Features to add, and other things to implement in the future:
 
-- [X] Unit tests and continuous integration
+- [X] ~~Unit tests and continuous integration~~
 - [ ] Deployable jars and instructions
 - [ ] Support for more complex queries, using [QueryBuilder](http://api.mongodb.com/java/current/com/mongodb/QueryBuilder.html)
 - [ ] Handling mongo connection errors using an appropriate [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for the API requests (e.g., 410 Gone or 503 Service Unavailable, etc.), along with an alert to the service maintainer
