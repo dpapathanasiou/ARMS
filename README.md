@@ -21,7 +21,13 @@ The database and collection names are embedded in the first two [path parameters
 
 ## Configuration
 
-Edit the [configuration.json](src/main/resources/configuration.json) file to define the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
+After cloning this repo, create one or more environment configuration folders under <tt>src/main/configurations</tt>. A typical deployment will have <tt>dev</tt>, <tt>qa</tt>, and <tt>prod</tt>, like this:
+
+```sh
+mkdir -p src/main/configurations/{dev,qa,prod}
+```
+
+The [configuration.json](src/main/resources/configuration.json) file defines the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
 
 The default values are:
 
@@ -32,12 +38,37 @@ The default values are:
 }
 ```
 
+Copy <tt>configuration.json</tt> into each of the <tt>src/main/configurations</tt> environment folders, and make the appropriate edits for each environment. 
+
+Everything under <tt>src/main/configurations</tt> is excluded from source control.
+
+## Building &amp; Deploying
+
+After [installing Kotlin](https://kotlinlang.org/docs/tutorials/getting-started.html) and defining your environment-specific setup in <tt>configuration.json</tt>, use the [gradle distTar or distZip task](https://docs.gradle.org/current/userguide/distribution_plugin.html#sec:distribution_tasks) along with the desired environment.
+
+For example, to build a zip file using the configuration defined in <tt>src/main/configurations/qa</tt>, run this command:
+
+```sh 
+./gradlew distZip -Penv=qa
+```
+
+If the <tt>-Penv=qa</tt> option is missing, the default <tt>configuration.json</tt> file from <tt>src/main/resources</tt> will be used instead.
+
+The resulting zip file, <tt>ARMS-0.0.1.zip</tt> will be created in the <tt>build/distributions</tt> folder.
+
+Copy or move it to the appropriate place on your server.
+
+Unzip it, and run it using either one of these launcher scripts:
+
+* <tt>ARMS-0.0.1/bin/ARMS</tt>
+* <tt>ARMS-0.0.1/bin/ARMS.bat</tt>
+
 ## Roadmap
 
 Features to add, and other things to implement in the future:
 
 - [X] ~~Unit tests and continuous integration~~
-- [ ] Deployable jars and instructions
+- [X] ~~Deployable jars and instructions~~
 - [ ] Support for more complex queries, using [QueryBuilder](http://api.mongodb.com/java/current/com/mongodb/QueryBuilder.html)
 - [ ] Handling mongo connection errors using an appropriate [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for the API requests (e.g., 410 Gone or 503 Service Unavailable, etc.), along with an alert to the service maintainer
 - [ ] Authentication, especially for PUT and DELETE requests

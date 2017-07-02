@@ -45,3 +45,12 @@ sourceSets {
         }
     }
 }
+
+distributions {
+    main {        
+        contents {
+            from sourceSets.main.resources
+        }
+    }
+}
+
