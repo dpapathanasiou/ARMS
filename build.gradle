@@ -1,0 +1,36 @@
+buildscript {
+  apply from: 'versions.gradle'
+  repositories {
+    mavenCentral()
+  }
+  dependencies {
+    classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+  }
+}
+
+apply plugin: 'kotlin'
+apply plugin: 'application'
+
+mainClassName = 'org.papathanasiou.denis.ARMS.AnotherRESTfulMongoService'
+
+defaultTasks 'run'
+
+repositories {
+  mavenCentral()
+}
+
+dependencies {
+  compile "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+  compile "org.glassfish.jersey.core:jersey-server:$jersey"
+  compile "org.glassfish.jersey.containers:jersey-container-netty-http:$jersey"
+  compile "com.fasterxml.jackson.module:jackson-module-kotlin:$jacksonKotlin"
+  compile "org.mongodb:mongodb-driver:$mongo"
+  testCompile "junit:junit:$junit"
+  testCompile "org.glassfish.jersey.test-framework.providers:jersey-test-framework-provider-grizzly2:$jersey"
+  testCompile "com.github.fakemongo:fongo:$fongo"
+  testCompile "ch.qos.logback:logback-classic:$logback"
+}
+
+task wrapper(type: Wrapper) {
+  gradleVersion = "$gradleVersion"
+}
