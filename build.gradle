@@ -36,3 +36,12 @@ dependencies {
 task wrapper(type: Wrapper) {
   gradleVersion = "$gradleVersion"
 }
+
+sourceSets {
+    main {
+        resources {
+            srcDir "src/main/kotlin"
+            srcDir project.hasProperty('env') ? "src/main/configurations/$env" : "src/main/resources"
+        }
+    }
+}
