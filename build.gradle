@@ -12,6 +12,8 @@ apply plugin: 'kotlin'
 apply plugin: 'application'
 
 mainClassName = 'org.papathanasiou.denis.ARMS.AnotherRESTfulMongoService'
+group = "org.papathanasiou.denis.ARMS"
+version = "0.0.1"
 
 defaultTasks 'run'
 

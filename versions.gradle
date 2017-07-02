@@ -8,5 +8,5 @@ ext {
     junit = '4.12'
     fongo = '2.1.0'
     logback = '1.1.7'
-    gradleVersion = '2.7'
+    gradleVersion = '4.0'
 }
