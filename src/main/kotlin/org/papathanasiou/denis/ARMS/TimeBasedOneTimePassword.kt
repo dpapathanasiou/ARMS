@@ -41,5 +41,10 @@ object TimeBasedOneTimePassword {
 
         return (buffer.getInt(0) and 0x7fffffff) % 100_000_000
     }
+    val TOTP = fun (seed: String): Int {
+        // define a "standard" computation, i.e., using 30 seconds as the timestep range
+        return TimeBasedOneTimePassword.generate(seed,30L, TimeUnit.SECONDS)
+    }
+
 }
 
