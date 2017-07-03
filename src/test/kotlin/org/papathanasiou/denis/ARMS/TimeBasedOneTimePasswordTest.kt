@@ -89,4 +89,18 @@ class TimeBasedOneTimePasswordTest {
         Assert.assertEquals(90698825, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(2000000000L)), algo))
         Assert.assertEquals(77737706, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(20000000000L)), algo))
     }
+
+    @Test
+    fun confirmSHA512() {
+        val algo: String = "HmacSHA512"
+        val seed: String = "1234567890123456789012345678901234567890123456789012345678901234"
+
+        // confirm all the Test Vectors which use SHA512
+        Assert.assertEquals(90693936, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(59L)), algo))
+        Assert.assertEquals(25091201, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(1111111109L)), algo))
+        Assert.assertEquals(99943326, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(1111111111L)), algo))
+        Assert.assertEquals(93441116, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(1234567890L)), algo))
+        Assert.assertEquals(38618901, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(2000000000L)), algo))
+        Assert.assertEquals(47863826, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(20000000000L)), algo))
+    }
 }
