@@ -2,6 +2,7 @@ package org.papathanasiou.denis.ARMS
 
 import org.junit.Assert
 import org.junit.Test
+import java.security.NoSuchAlgorithmException
 import java.util.Date
 import java.util.concurrent.TimeUnit
 
@@ -102,5 +103,13 @@ class TimeBasedOneTimePasswordTest {
         Assert.assertEquals(93441116, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(1234567890L)), algo))
         Assert.assertEquals(38618901, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(2000000000L)), algo))
         Assert.assertEquals(47863826, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(20000000000L)), algo))
+    }
+
+    @Test(expected = NoSuchAlgorithmException::class)
+    fun confirmBadAlgo() {
+        val algo: String = "HmacSHA007"
+        val seed: String = "1234567890"
+
+        Assert.assertEquals(90693936, testPassword(seed, Date(TimeUnit.SECONDS.toMillis(59L)), algo))
     }
 }
