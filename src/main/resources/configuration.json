@@ -1,4 +1,6 @@
 {
+    "authSeeds": {},
+    "authenticate": false,
     "mongoURI": "mongodb://localhost:27017",
     "serviceURI": "http://localhost:9001/"
 }

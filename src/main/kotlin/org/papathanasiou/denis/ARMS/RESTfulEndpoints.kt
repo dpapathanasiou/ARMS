@@ -1,27 +1,58 @@
 package org.papathanasiou.denis.ARMS
 
 import com.mongodb.MongoClient
-import javax.ws.rs.DELETE
-import javax.ws.rs.GET
-import javax.ws.rs.PUT
-import javax.ws.rs.Consumes
-import javax.ws.rs.Path
-import javax.ws.rs.PathParam
-import javax.ws.rs.Produces
-import javax.ws.rs.WebApplicationException
-import javax.ws.rs.core.Context
+import javax.ws.rs.*
+import javax.ws.rs.core.*
 import javax.ws.rs.core.MediaType.APPLICATION_JSON
-import javax.ws.rs.core.MultivaluedMap
-import javax.ws.rs.core.Response
-import javax.ws.rs.core.UriInfo
 
 class BadAPIRequest(message: String?) : WebApplicationException(message, Response.Status.BAD_REQUEST)
+class ForbiddenAPIRequest(message: String?) : WebApplicationException(message, Response.Status.FORBIDDEN)
 
 @Path("")
-class RESTfulEndpoints(client: MongoClient?): MongoInterface {
+class RESTfulEndpoints(client: MongoClient?,
+                       useAuth: Boolean,
+                       auth: Map<String, ClientAuth>,
+                       calculateTOTP: (String) -> Int): MongoInterface {
+
     override val connection: MongoConnection = MongoConnection(client)
 
+    val checkAuth: Boolean = useAuth
+    val authorizedClients: Map<String, ClientAuth> = auth
+    val computeTOTP: (String) -> Int = calculateTOTP
+
     val MISSING_PARAMS = "please provide query parameters"
+    val API_KEY = "API-KEY"
+    val API_TOTP = "API-TOTP"
+    val INVALID_TOTP = "please provide a valid $API_KEY and $API_TOTP in the request headers"
+
+    val HTTP_GET = "GET"
+    val HTTP_PUT = "PUT"
+    val HTTP_DELETE = "DELETE"
+
+    fun isVerbAllowed(clientAuth: ClientAuth?, verb: String): Boolean {
+        val result = when(verb) {
+            HTTP_GET -> clientAuth?.GET
+            HTTP_PUT -> clientAuth?.PUT
+            HTTP_DELETE -> clientAuth?.DELETE
+            else -> false
+        }
+        return if( result != null ) result else false
+    }
+
+    fun isRequestAuthorized(headers: HttpHeaders, verb: String): Boolean {
+        if( checkAuth ) {
+            val key = headers.getRequestHeader(API_KEY)?.firstOrNull()
+            val pwd = headers.getRequestHeader(API_TOTP)?.firstOrNull()
+            if( key != null && pwd != null ) {
+                val seed = authorizedClients.get(key)?.seed
+                val totp = if( seed != null ) computeTOTP(seed) else null
+                val code = if( totp != null ) totp == pwd.toIntOrNull() else false
+                return code && isVerbAllowed(authorizedClients.get(key), verb)
+            }
+            return false
+        }
+        return true
+    }
 
     fun scalarizeQueryParameters(query: MultivaluedMap<String, String>): Map<String,String> {
         return query.filter({it.value.isNotEmpty()})
@@ -33,7 +64,10 @@ class RESTfulEndpoints(client: MongoClient?): MongoInterface {
     @Path("{database}/{collection}")
     fun findDocument(@PathParam("database") database: String,
                      @PathParam("collection") collection: String,
-                     @Context ui: UriInfo): Response {
+                     @Context ui: UriInfo,
+                     @Context headers: HttpHeaders): Response {
+
+        if( !isRequestAuthorized(headers, HTTP_GET) ) throw ForbiddenAPIRequest(INVALID_TOTP)
 
         val query = ui.queryParameters
         if( query.isEmpty() ) throw BadAPIRequest(MISSING_PARAMS)
@@ -50,7 +84,10 @@ class RESTfulEndpoints(client: MongoClient?): MongoInterface {
     @Path("{database}/{collection}")
     fun deleteDocument(@PathParam("database") database: String,
                        @PathParam("collection") collection: String,
-                       @Context ui: UriInfo): Response {
+                       @Context ui: UriInfo,
+                       @Context headers: HttpHeaders): Response {
+
+        if( !isRequestAuthorized(headers, HTTP_DELETE) ) throw ForbiddenAPIRequest(INVALID_TOTP)
 
         val query = ui.queryParameters
         if (query.isEmpty()) throw BadAPIRequest(MISSING_PARAMS)
@@ -66,7 +103,10 @@ class RESTfulEndpoints(client: MongoClient?): MongoInterface {
     fun addOrReplaceDocument(@PathParam("database") database: String,
                              @PathParam("collection") collection: String,
                              doc: String,
-                             @Context ui: UriInfo): Response {
+                             @Context ui: UriInfo,
+                             @Context headers: HttpHeaders): Response {
+
+        if( !isRequestAuthorized(headers, HTTP_PUT) ) throw ForbiddenAPIRequest(INVALID_TOTP)
 
         // TODO: if the doc is invalid json, return a 400/Bad Request, not the 500 jersey default
         addDocument(database, collection, scalarizeQueryParameters(ui.queryParameters), doc)

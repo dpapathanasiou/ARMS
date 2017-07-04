@@ -1,0 +1,19 @@
+{
+    "authSeeds": {
+        "client1": {
+            "DELETE": false,
+            "GET": true,
+            "PUT": false,
+            "seed": "12345678901234567890"
+        },
+        "client2": {
+            "DELETE": true,
+            "GET": true,
+            "PUT": true,
+            "seed": "0987654321"
+        }
+    },
+    "authenticate": true,
+    "mongoURI": "mongodb://localhost:27017",
+    "serviceURI": "http://localhost:9001/"
+}
