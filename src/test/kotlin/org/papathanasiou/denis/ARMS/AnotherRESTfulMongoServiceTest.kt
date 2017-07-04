@@ -14,7 +14,6 @@ import org.glassfish.jersey.test.DeploymentContext
 import java.io.IOException
 
 import javax.ws.rs.client.Entity
-import javax.ws.rs.core.HttpHeaders
 import javax.ws.rs.core.Response
 
 
