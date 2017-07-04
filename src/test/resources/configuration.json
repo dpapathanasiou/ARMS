@@ -10,7 +10,7 @@
             "DELETE": true,
             "GET": true,
             "PUT": true,
-            "seed": "12345678901234567890"
+            "seed": "0987654321"
         }
     },
     "authenticate": true,

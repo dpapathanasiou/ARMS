@@ -27,12 +27,14 @@ After cloning this repo, create one or more environment configuration folders un
 mkdir -p src/main/configurations/{dev,qa,prod}
 ```
 
-The [configuration.json](src/main/resources/configuration.json) file defines the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/).
+The [configuration.json](src/main/resources/configuration.json) file defines the service host and port, as well as the [Mongo Connection String URI](https://docs.mongodb.com/manual/reference/connection-string/), as well as authentication options per client, per HTTP action.
 
 The default values are:
 
 ```json
 {
+    "authSeeds": {},
+    "authenticate": false,
     "mongoURI": "mongodb://localhost:27017",
     "serviceURI": "http://localhost:9001/"
 }
@@ -41,6 +43,19 @@ The default values are:
 Copy <tt>configuration.json</tt> into each of the <tt>src/main/configurations</tt> environment folders, and make the appropriate edits for each environment. 
 
 Everything under <tt>src/main/configurations</tt> is excluded from source control.
+
+### Client Request Authentication (optional)
+
+When <tt>"authenticate"</tt> in the <tt>configuration.json</tt> file is set to <tt>true</tt>, each client request must include these two headers, otherwise the server will reply with [403 Forbidden](https://en.wikipedia.org/wiki/HTTP_403):
+
+* API-KEY &mdash; a unique client identifier string, defined as a key in the <tt>"authSeeds"</tt> hash
+* API-TOTP &mdash; a Time-Based One-Time Password (TOTP) string, generated as defined in [RFC 6238](https://tools.ietf.org/html/rfc6238), using the seed value in the <tt>"authSeeds"</tt> hash for the corresponding client identifier
+
+Each API client needs to know its seed value and keep it secret, so that it can produce the TOTP within 30 seconds of each request it makes to the server.
+
+Permissions are granular, per each HTTP action (GET, PUT, DELETE), and an API client have have any combination of allowed and disallowed requests.
+
+The [test configuration](src/test/resources/configuration.json) file has an example for two API clients, the first of which has read-only access (i.e., find using GET, but not PUT nor DELETE), and the second of which has all permissions.
 
 ## Building &amp; Deploying
 
@@ -71,7 +86,7 @@ Features to add, and other things to implement in the future:
 - [X] ~~Deployable jars and instructions~~
 - [ ] Support for more complex queries, using [QueryBuilder](http://api.mongodb.com/java/current/com/mongodb/QueryBuilder.html)
 - [ ] Handling mongo connection errors using an appropriate [HTTP status code](https://www.w3.org/Protocols/rfc2616/rfc2616-sec10.html) for the API requests (e.g., 410 Gone or 503 Service Unavailable, etc.), along with an alert to the service maintainer
-- [ ] Authentication, especially for PUT and DELETE requests
+- [X] ~~Authentication, especially for PUT and DELETE requests~~
 - [ ] Prevent [Jersey](https://jersey.github.io/) from returning 500 when the json document used in the PUT request is invalid (alas, [this solution](https://stackoverflow.com/a/10738086) doesn't seem to work)
 
 Pull requests for both roadmap ideas and implementations are welcome!
